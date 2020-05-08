@@ -1,11 +1,16 @@
 import React from 'react'
-import {TCard, TSuit} from '../types'
+import {card, suit} from '../types'
 
-type TProps = {
-  suit: TSuit
-  card: TCard
+type props = {
+  suit: suit
+  card: card
+  pair?: 0 | 1
 }
 
-export const Card: React.FC<TProps> = ({suit, card}) => <>
-  <img src={`http://h3h.net/images/cards/${suit}_${card}.svg`} alt={'card'}/>
-</>
+export const Card: React.FC<props> = ({suit, card, pair}) => (
+  <img
+    src={`http://h3h.net/images/cards/${suit}_${card}.svg`}
+    alt={'card'}
+    className={pair !== undefined ? `card pair${pair}` : 'card'}
+  />
+)

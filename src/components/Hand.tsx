@@ -1,13 +1,23 @@
 import React from 'react'
-import {TPlayCard} from '../types'
+import {playCard} from '../types'
 import {Card} from './Card'
 
-type TProps = {
-  playCards: TPlayCard[]
+type props = {
+  player: number
+  playCards: playCard[]
+  winning?: boolean
 }
 
-export const Hand: React.FC<TProps> = ({playCards}) => <>
-  {playCards.map(({suit, card}, idx) => <>
-    <Card key={idx} suit={suit} card={card}/>
-  </>)}
-</>
+export const Hand: React.FC<props> = ({playCards, player, winning}) => (
+  <div className={winning ? 'hand winning' : 'hand'}>
+    <h1>Player {player}</h1>
+    {playCards.map(({suit, card, pair}, idx) => (
+      <Card
+        key={idx}
+        suit={suit}
+        card={card}
+        pair={pair}
+      />
+    ))}
+  </div>
+)
