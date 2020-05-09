@@ -7,18 +7,30 @@ import {suits as suitsConst, cards as cardsConst} from './constants'
 export const App: React.FC = () => {
   const [hand1, setHand1] = useState<playCard[]>([])
   const [hand2, setHand2] = useState<playCard[]>([])
+  const [winning, setWinning] = useState<0 | 1 | 2>(0)
+
   useEffect(() => {
     replay()
   }, [])
 
   function replay() {
-    // console.log('replay')
     const h = hands()
+    setWinning(winningFn(h))
     setHand1(h.hand1)
     setHand2(h.hand2)
   }
 
-  function hands(): { hand1: playCard[], hand2: playCard[] } {
+  function winningFn(hands: {hand1: playCard[], hand2: playCard[]}): 0 | 1 | 2 {
+    const h1 = hands.hand1
+    const h2 = hands.hand2
+    const pairs1 = h1.filter(({pair}) => pair !== undefined).length / 2
+    const pairs2 = h2.filter(({pair}) => pair !== undefined).length / 2
+    if (pairs1 > pairs2) return 1
+    if (pairs1 < pairs2) return 2
+    return 0
+  }
+
+  function hands(): {hand1: playCard[], hand2: playCard[]} {
     const cards = deal()
     const hand1 = pair(cards.slice(0, 5))
     const hand2 = pair(cards.slice(5, 10))
@@ -29,7 +41,6 @@ export const App: React.FC = () => {
     let h = hand
     let pairNum: 0 | 1 = 0
     h.forEach((playCard, index) => {
-      const isPaired1 = h[index].pair !== undefined
       h.forEach((pc, i) => {
         const isSame = index === i
         const isPaired1 = h[index].pair !== undefined
@@ -79,8 +90,8 @@ export const App: React.FC = () => {
   }
 
   return (<>
-    <Hand playCards={hand1} name={'Player 1'} winning={true}/>
-    <Hand playCards={hand2} name={'Player 2'}/>
+    <Hand playCards={hand1} name={'Player 1'} winning={winning === 1}/>
+    <Hand playCards={hand2} name={'Player 2'} winning={winning === 2}/>
     <Button click={replay}/>
   </>)
 }
