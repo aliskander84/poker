@@ -3,14 +3,14 @@ import {playCard} from '../types'
 import {Card} from './Card'
 
 type props = {
-  player: number
+  name: string
   playCards: playCard[]
   winning?: boolean
 }
 
-export const Hand: React.FC<props> = ({playCards, player, winning}) => (
+export const Hand: React.FC<props> = ({playCards, name, winning}) => (
   <div className={winning ? 'hand winning' : 'hand'}>
-    <h1>Player {player}</h1>
+    <h1>{name}</h1>
     {playCards.map(({suit, card, pair}, idx) => (
       <Card
         key={idx}
